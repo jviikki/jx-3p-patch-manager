@@ -17,7 +17,7 @@ objdir=obj
 libdir=$(call FixPath, lib/$(OS))
 srcdir=src
 CC=gcc
-CFLAGS=-I$(incdir) -L$(libdir) -Wall
+CFLAGS=-I$(incdir) -Wall -g
 
 
 # targets
@@ -46,22 +46,22 @@ endif
 
 
 # executables
-analyzer.o : $(srcdir)/analyzer.c sndfile
+analyzer.o : $(srcdir)/analyzer.c
 	$(CC) -c -o $(objdir)/$@ $< $(CFLAGS)
 analyzer: detector.o analyzer.o
 	$(CC) -o $@ $(addprefix $(objdir)/, $^) $(CFLAGS) -l$(LibSndFile)
 
-bitstream.o : $(srcdir)/bitstream.c sndfile
+bitstream.o : $(srcdir)/bitstream.c
 	$(CC) -c -o $(objdir)/$@ $< $(CFLAGS)
 bitstream: detector.o demodulator.o bitstream.o
 	$(CC) -o $@ $(addprefix $(objdir)/, $^) $(CFLAGS) -l$(LibSndFile)
 
-c1diff.o : $(srcdir)/c1diff.c sndfile
+c1diff.o : $(srcdir)/c1diff.c
 	$(CC) -c -o $(objdir)/$@ $< $(CFLAGS)
 c1diff: detector.o demodulator.o c1diff.o
 	$(CC) -o $@ $(addprefix $(objdir)/, $^) $(CFLAGS) -l$(LibSndFile)
 
-decode_patches.o : $(srcdir)/decode_patches.c sndfile
+decode_patches.o : $(srcdir)/decode_patches.c
 	$(CC) -c -o $(objdir)/$@ $< $(CFLAGS)
 decode_patches: detector.o demodulator.o decoder_patch.o decode_patches.o
 	$(CC) -o $@ $(addprefix $(objdir)/, $^) $(CFLAGS) -l$(LibSndFile)

@@ -129,7 +129,7 @@ int main( int argc, char *argv[] )
 
 	// init decoder_patch state
 	Decoder_State decode_state;
-	init_decoder_state(decode_state);
+	decode_state = init_decoder_state();
 	patch_collection = init_patch_collection();
 
 
