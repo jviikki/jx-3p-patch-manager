@@ -1,0 +1,36 @@
+INSTALLATION AND USAGE:
+
+
+INSTALLATION:
+
+To install the utility, simply download the precompiled binary package and unzip it into a folder of your choice. If you want to look at the source code and compile the utility yourself, download the source archive, unzip it, and have fun.
+
+
+USAGE:
+
+This utility is intended for use as a command-line tool, meaning the user will need to execute the program in a command shell window (see the documentation for your operating system for how to do this). Open a command window, change to the directory where the executable file lives, and execute with the following command:
+
+	decode_patches <wavfilename>
+
+Some operating systems (like some versions of Windows, for instance) will allow the user to drag-and-drop the tape dump audio file onto the executable icon. A command window will pop up, the tool will do its work, and if there are any errors in decoding, the window will remain open so you can read the error messages. On successful completion, the patch parameters will be in a spreadsheet in the file “patchdump.csv”.
+
+
+AUDIO PREPARATION:
+
+For best results, you will need to take some care in preparing your tape audio file. Record your tape dump in the audio editor of your choice (directly from the JX-3P tape jack, if possible), trim any noise and silence before the beginning and after the end of the dump signal, amplify/normalize to the proper amplitude (between -12dB and -1dB), and save the file.
+
+    - Bit depth: 8, 16, 24 bits are supported (16 bits is optimal)
+    - Sample rate: 44.1 KHz is most suitable, but 22.1 KHz should work, too.
+    - Channels: The tool works best with mono only. If a stereo file is used, the tool will use only the left channel and ignore the rest.
+    - Format: Any format supported by LibSndFile is supported; this includes Microsoft PCM/WAV, Apple AIFF, and Sun AU.
+    - Volume: for best results, amplify or normalize the dump audio to an average amplitude of between -12dB and -1dB. Do not clip the audio. If it is too quiet, the logic won’t detect the signal.
+    - Source recording: best results are obtained by directly recording the dump audio by connecting the JX-3P tape out jack to your workstation’s audio interface. Decoding audio previously stored on magnetic tape is currently untested and not guaranteed to work due to the excess noise, dropouts, jitter, stretch, and preemphasis compression inherent in tape recording and playback.
+
+
+LICENSE:
+
+Written by Shawn Thomas (C)2013 for publication on (http://www.phaysis.com). This code is provided as-is with no warranty expressed or implied. Use at your own risk. Author is not responsible for data loss.
+
+Due to the difficulty of copyright enforcement once the source code is released to the public, the segments of this work written by me are released to the public domain. Do with it as you wish. If I can figure it out, you can figure it out. No magical skills required.
+
+This work includes a dynamically-linked binary copy of the libsndfile library written by Erik de Castro Lopo (available at http://www.mega-nerd.com/libsndfile/) for audio file I/O. It is covered by the LGPL license and is copyrighted by its author. A copy of the LGPL license is located at (http://www.gnu.org/copyleft/lesser.html). If compiling on Linux, it is best to use your package management system to install the library (and any development files if you choose to recompile) into your system folders. Otherwise, download the library package from the home site and install a copy of the .dll/.so into the project's root folder.

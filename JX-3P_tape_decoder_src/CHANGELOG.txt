@@ -1,0 +1,10 @@
+Changelog:
+
+- 2013-03-08:
+	fixed field output values for some DCO-2 params. Thanks to Paul.
+- 2013-04-03:
+	fixed field output value for LFO waveform, was “saw”, changed to “sine”. Added LFO waveform “fast-random” to support later ROM updates which added the new waveform. Fixed DCO2 labeling to include “noise” as a waveform. Thanks to Paul.
+- 2013-04-07:
+	updated documentation to include a usage and installation guide. Tool now waits for user input if there are error messages (to help drag-drop users debug issues). Tool properly supports multi-channel audio files, using only the first channel. Thanks to Kenny. Also, split distribution into a precompiled package and a source package.
+- 2013-05-05:
+	Major reliability upgrades in the decoder module. It's now better suited to withstand dropouts and noise in the dump signal. Fixed some faulty assumptions I made in the original releases that prevented the code from rebounding from a single bad bit detection in the stream. If both copies of a patch are unreadable, the code willl simply place a series of dashes in the spreadsheet. All users are advised to upgrade to this version; sorry for the mix-up. Thanks to Laurens at Organix for providing the one corner case that caused me to rework and vastly simplify my design into something more resilient.
