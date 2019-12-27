@@ -1,9 +1,20 @@
+CFLAGS=-Wall
+LIBS=-lsndfile
+OBJS=encoder.o audio.o
+
 .PHONY: all
 all: encoder
 
-encoder: encoder.c
-	gcc -Wall -lsndfile -o encoder encoder.c
+audio.o: audio.c
+	gcc $(CFLAGS) -c audio.c
+
+encoder.o: encoder.c audio.h
+	gcc $(CFLAGS) -c encoder.c
+
+encoder: $(OBJS)
+	gcc $(CFLAGS) $(LIBS) -o encoder $(OBJS)
 
 .PHONY: clean
 clean:
-	rm encoder
+	rm -f encoder
+	rm -f *.o
