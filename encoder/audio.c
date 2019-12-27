@@ -1,3 +1,5 @@
+#include "sndfile.h"
+
 const short AUDIO_BIT_ZERO[] = {
     12244,
     19836,
@@ -64,3 +66,25 @@ const short AUDIO_BIT_ONE[] = {
     2418,
     2643
 };
+
+sf_count_t audio_write_all(SNDFILE* file, const short* samples, sf_count_t len) {
+    sf_count_t total_bytes_written = 0;
+    sf_count_t bytes_written = 0;
+    do {
+        bytes_written = sf_write_short(file, samples + total_bytes_written, len);
+        total_bytes_written += bytes_written;
+    } while(bytes_written > 0 && total_bytes_written < len);
+    return total_bytes_written;
+}
+
+int audio_write(SNDFILE* file, const short* samples, sf_count_t len) {
+    return audio_write_all(file, samples, len) == len ? 0 : -1;
+}
+
+int audio_write_bit_zero(SNDFILE* file) {
+    return audio_write(file, &AUDIO_BIT_ZERO[0], sizeof(AUDIO_BIT_ZERO) / sizeof(short));
+}
+
+int audio_write_bit_one(SNDFILE* file) {
+    return audio_write(file, &AUDIO_BIT_ONE[0], sizeof(AUDIO_BIT_ONE) / sizeof(short));
+}

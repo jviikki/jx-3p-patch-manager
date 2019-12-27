@@ -1,20 +1,27 @@
 CFLAGS=-Wall
 LIBS=-lsndfile
-OBJS=encoder.o audio.o
+READER_OBJS=reader.o
+WRITER_OBJS=writer.o audio.o
 
 .PHONY: all
-all: encoder
+all: reader writer
 
 audio.o: audio.c
 	gcc $(CFLAGS) -c audio.c
 
-encoder.o: encoder.c audio.h
-	gcc $(CFLAGS) -c encoder.c
+reader.o: reader.c
+	gcc $(CFLAGS) -c reader.c
 
-encoder: $(OBJS)
-	gcc $(CFLAGS) $(LIBS) -o encoder $(OBJS)
+writer.o: writer.c audio.h
+	gcc $(CFLAGS) -c writer.c
+
+reader: $(READER_OBJS)
+	gcc $(CFLAGS) $(LIBS) -o reader $(READER_OBJS)
+
+writer: $(WRITER_OBJS)
+	gcc $(CFLAGS) $(LIBS) -o writer $(WRITER_OBJS)
 
 .PHONY: clean
 clean:
-	rm -f encoder
+	rm -f reader writer
 	rm -f *.o

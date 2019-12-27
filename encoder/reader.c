@@ -3,6 +3,16 @@
 
 #define BUFFER_SIZE 1024
 
+void print_samples(SNDFILE* file) {
+    static short samples[BUFFER_SIZE];
+    sf_count_t items_read = 0;
+    while ((items_read = sf_read_short(file, &samples[0], BUFFER_SIZE)) > 0) {
+        for(uint i = 0; i < items_read; i++) {
+            printf("%d\n", samples[i]);
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         printf("USAGE: %s <audio_file>\n", argv[0]);
@@ -22,13 +32,7 @@ int main(int argc, char *argv[]) {
     printf("frames: %lld, samplerate: %d, channels: %d, format: %d, sections: %d, seekable: %d\n",
         info.frames, info.samplerate, info.channels, info.format, info.sections, info.seekable);
 
-    short samples[BUFFER_SIZE];
-    sf_count_t items_read = 0;
-    while ((items_read = sf_read_short(file, &samples[0], BUFFER_SIZE))) {
-        for(uint i = 0; i < items_read; i++) {
-            printf("%d\n", samples[i]);
-        }
-    }
+    print_samples(file);
 
     int error = sf_close(file);
     if (error) {
