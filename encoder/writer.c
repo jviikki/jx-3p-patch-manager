@@ -7,6 +7,9 @@
 #include "audio.h"
 #include "csv_parser.h"
 
+#define BITS_IN_PILOT_TONE 4096
+#define BITS_IN_PADDING_TONE 51
+
 void write_data(SNDFILE* file) {
     for (int i = 0; i < 10000; i++) {
         int res = 0;
@@ -44,6 +47,7 @@ void write_random_data(SNDFILE* file) {
     }
 }
 
+// TODO: add error handling
 void write_byte(SNDFILE* file, unsigned char byte) {
     audio_write_bit_zero(file); // serial frame start
 
@@ -58,6 +62,7 @@ void write_byte(SNDFILE* file, unsigned char byte) {
     audio_write_bit_one(file);
 }
 
+// TODO: add error handling
 void write_patch(SNDFILE* file, JX3P_PATCH* patch) {
     // Disregard the last byte which is the checksum
     int num_bytes = sizeof(patch->raw) / sizeof(unsigned char) - 1;
@@ -69,6 +74,18 @@ void write_patch(SNDFILE* file, JX3P_PATCH* patch) {
     }
 
     write_byte(file, checksum);
+}
+
+void write_pilot_tone(SNDFILE* file) {
+    for (int i = 0; i < BITS_IN_PILOT_TONE; i++) {
+        audio_write_bit_one(file);
+    }
+}
+
+void write_padding(SNDFILE* file) {
+    for (int i = 0; i < BITS_IN_PADDING_TONE; i++) {
+        audio_write_bit_one(file);
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -99,7 +116,11 @@ int main(int argc, char *argv[]) {
 
     JX3P_PATCH patch;
     populate_test_patch(&patch);
-    write_patch(file, &patch);
+    write_pilot_tone(file);
+    for(int i = 0; i < 20; i++) {
+        write_patch(file, &patch);
+        write_padding(file);
+    }
 
     int error = sf_close(file);
     if (error) {
