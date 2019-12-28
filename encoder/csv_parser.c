@@ -2,8 +2,11 @@
 #include "patch.h"
 
 void print_byte(unsigned char byte) {
-    for (int j = 7; j >= 0; j--) {
-        printf("%d", !!((byte << j) & 0x80));
+    for (unsigned int i = 0; i < 8; i++) {
+        if (byte & (1 << i))
+            printf("1");
+        else
+            printf("0");
     }
     printf("\n");
 }
@@ -70,8 +73,9 @@ void populate_test_patch(JX3P_PATCH* patch) {
     patch->env_decay = 155; // 8
     patch->env_sustain = 121; // 8
     patch->env_release = 0; // 8
-    // TODO: this needs to be calculated
-    patch->checksum = 236; // 8
+
+    // This field is calculated from other content
+    patch->checksum = 0; // 8
 
     print_patch(patch);
 }
