@@ -29,17 +29,17 @@ void print_patch(JX3P_PATCH* patch) {
     printf("\n");
 }
 
-void populate_test_patch(JX3P_PATCH* patch) {
+void populate_test_patch(JX3P_PATCH* patch, unsigned int bank_num, unsigned int patch_num) {
     // 6 bits
     patch->datatype = 2; // 2 bits
 
     patch->bank_ab = 0; // 2 bits
     // 6 bits
 
-    patch->bank_cd = 2; // 2 bits
+    patch->bank_cd = bank_num + 2; // 2 bits
     // 6
 
-    patch->patch_num = 0; // 4
+    patch->patch_num = patch_num; // 4
     // 4
 
     patch->dco1_range = 0; // 2
@@ -82,5 +82,13 @@ void populate_test_patch(JX3P_PATCH* patch) {
     // This field is calculated from other content
     patch->checksum = 0; // 8
 
-    print_patch(patch);
+    // print_patch(patch);
+}
+
+void parse_csv(JX3P_PATCH_COLLECTION* patches) {
+    for (unsigned int bank = 0; bank < 2; bank++) {
+        for (unsigned int patch = 0; patch < 16; patch++) {
+            populate_test_patch(&patches->data[bank][patch], bank, patch);
+        }
+    }
 }

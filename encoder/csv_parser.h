@@ -3,6 +3,6 @@
 
 #include "patch.h"
 
-void populate_test_patch(JX3P_PATCH* patch);
+void parse_csv(JX3P_PATCH_COLLECTION* patches);
 
 #endif // CSV_PARSER_H

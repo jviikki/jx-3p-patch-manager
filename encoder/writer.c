@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 
 #include "sndfile.h"
 
@@ -9,43 +7,6 @@
 
 #define BITS_IN_PILOT_TONE 4096
 #define BITS_IN_PADDING_TONE 51
-
-void write_data(SNDFILE* file) {
-    for (int i = 0; i < 10000; i++) {
-        int res = 0;
-
-        if ((i / 1000) % 2) {
-            res = audio_write_bit_one(file);
-        } else {
-            res = audio_write_bit_zero(file);
-        }
-
-        if (res) {
-            printf("Error writing audio. i = %d", i);
-            return;
-        }
-    }
-}
-
-void write_random_data(SNDFILE* file) {
-    time_t t;
-    srand((unsigned) time(&t));
-
-    for (int i = 0; i < 50000; i++) {
-        int res = 0;
-
-        if (rand() > RAND_MAX / 2) {
-            res = audio_write_bit_one(file);
-        } else {
-            res = audio_write_bit_zero(file);
-        }
-
-        if (res) {
-            printf("Error writing audio. i = %d", i);
-            return;
-        }
-    }
-}
 
 // TODO: add error handling
 void write_byte(SNDFILE* file, unsigned char byte) {
@@ -88,6 +49,18 @@ void write_padding(SNDFILE* file) {
     }
 }
 
+void write_patches(SNDFILE* file, JX3P_PATCH_COLLECTION* patches) {
+    for (int bank = 0; bank < 2; bank++) {
+        write_pilot_tone(file);
+        for (int patch = 0; patch < 16; patch++) {
+            write_patch(file, &patches->data[bank][patch]);
+            write_padding(file);
+            write_patch(file, &patches->data[bank][patch]);
+            write_padding(file);
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         printf("USAGE: %s <audio_file>\n", argv[0]);
@@ -111,16 +84,9 @@ int main(int argc, char *argv[]) {
     printf("frames: %lld, samplerate: %d, channels: %d, format: %d, sections: %d, seekable: %d\n",
         info.frames, info.samplerate, info.channels, info.format, info.sections, info.seekable);
 
-    // write_data(file);
-    // write_random_data(file);
-
-    JX3P_PATCH patch;
-    populate_test_patch(&patch);
-    write_pilot_tone(file);
-    for(int i = 0; i < 20; i++) {
-        write_patch(file, &patch);
-        write_padding(file);
-    }
+    JX3P_PATCH_COLLECTION patches;
+    parse_csv(&patches);
+    write_patches(file, &patches);
 
     int error = sf_close(file);
     if (error) {
