@@ -5,6 +5,7 @@
 #include "sndfile.h"
 
 #include "audio.h"
+#include "csv_parser.h"
 
 void write_data(SNDFILE* file) {
     for (int i = 0; i < 10000; i++) {
@@ -67,7 +68,10 @@ int main(int argc, char *argv[]) {
         info.frames, info.samplerate, info.channels, info.format, info.sections, info.seekable);
 
     // write_data(file);
-    write_random_data(file);
+    // write_random_data(file);
+
+    JX3P_PATCH patch;
+    populate_test_patch(&patch);
 
     int error = sf_close(file);
     if (error) {

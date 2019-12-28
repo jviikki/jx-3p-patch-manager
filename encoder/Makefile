@@ -1,7 +1,7 @@
 CFLAGS=-Wall
 LIBS=-lsndfile
 READER_OBJS=reader.o
-WRITER_OBJS=writer.o audio.o
+WRITER_OBJS=writer.o audio.o csv_parser.o
 
 .PHONY: all
 all: reader writer
@@ -14,6 +14,9 @@ reader.o: reader.c
 
 writer.o: writer.c audio.h
 	gcc $(CFLAGS) -c writer.c
+
+csv_parser.o: csv_parser.c patch.h
+	gcc $(CFLAGS) -c csv_parser.c
 
 reader: $(READER_OBJS)
 	gcc $(CFLAGS) $(LIBS) -o reader $(READER_OBJS)
