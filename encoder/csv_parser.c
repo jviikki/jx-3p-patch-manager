@@ -2,13 +2,17 @@
 #include "patch.h"
 
 void print_byte(unsigned char byte) {
+    printf("0");
+
     for (unsigned int i = 0; i < 8; i++) {
         if (byte & (1 << i))
             printf("1");
         else
             printf("0");
     }
-    printf("\n");
+
+    printf("1");
+    printf("1");
 }
 
 void print_patch(JX3P_PATCH* patch) {
@@ -22,6 +26,7 @@ void print_patch(JX3P_PATCH* patch) {
     }
 
     print_byte(checksum);
+    printf("\n");
 }
 
 void populate_test_patch(JX3P_PATCH* patch) {
