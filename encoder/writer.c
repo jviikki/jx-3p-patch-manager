@@ -44,6 +44,33 @@ void write_random_data(SNDFILE* file) {
     }
 }
 
+void write_byte(SNDFILE* file, unsigned char byte) {
+    audio_write_bit_zero(file); // serial frame start
+
+    for (unsigned int i = 0; i < 8; i++) {
+        if (byte & (1 << i))
+            audio_write_bit_one(file);
+        else
+            audio_write_bit_zero(file);
+    }
+
+    audio_write_bit_one(file); // serial frame stop
+    audio_write_bit_one(file);
+}
+
+void write_patch(SNDFILE* file, JX3P_PATCH* patch) {
+    // Disregard the last byte which is the checksum
+    int num_bytes = sizeof(patch->raw) / sizeof(unsigned char) - 1;
+    unsigned char checksum = 0;
+
+    for (int i = 0; i < num_bytes; i++) {
+        write_byte(file, patch->raw[i]);
+        checksum += patch->raw[i];
+    }
+
+    write_byte(file, checksum);
+}
+
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         printf("USAGE: %s <audio_file>\n", argv[0]);
@@ -72,6 +99,7 @@ int main(int argc, char *argv[]) {
 
     JX3P_PATCH patch;
     populate_test_patch(&patch);
+    write_patch(file, &patch);
 
     int error = sf_close(file);
     if (error) {
