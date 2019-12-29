@@ -30,7 +30,7 @@ typedef union {
 		unsigned int dco1_fmod_env		: 1;	// [6] A04 DCO-1 ENV Mod off/on
 		unsigned int dco1_fmod_lfo		: 1;	// [7] A03 DCO-1 LFO Mod off/on
 		// 06
-		unsigned int lfo_waveform		: 2;	// [0-1] B10 LFO Waveform (sine (or saw?), square, random, fast random)
+		unsigned int lfo_waveform		: 2;	// [0-1] B10 LFO Waveform (sine, square, random, fast random)
 		unsigned int dco_env_polarity	: 1;	// [2] A14 DCO ENV Polarity (0=negative, 1=positive)
 		unsigned int chorus				: 1;	// [3] B09 Chorus off/on
 		unsigned int 					: 4;	// [4-7] unused

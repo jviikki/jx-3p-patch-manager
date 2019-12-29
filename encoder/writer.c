@@ -6,7 +6,7 @@
 #include "csv_parser.h"
 
 #define BITS_IN_PILOT_TONE 4096
-#define BITS_IN_PADDING_TONE 51
+#define BITS_IN_PADDING_TONE 48
 
 // TODO: add error handling
 void write_byte(SNDFILE* file, unsigned char byte) {
@@ -85,7 +85,13 @@ int main(int argc, char *argv[]) {
         info.frames, info.samplerate, info.channels, info.format, info.sections, info.seekable);
 
     JX3P_PATCH_COLLECTION patches;
-    parse_csv(&patches);
+    FILE *csv_file = fopen("patchdump.csv", "r");
+    if (!csv_file) {
+        printf("Unable to open CSV file\n");
+        return 1;
+    }
+    parse_csv(&patches, csv_file);
+    fclose(csv_file);
     write_patches(file, &patches);
 
     int error = sf_close(file);
