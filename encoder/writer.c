@@ -6,7 +6,7 @@
 #include "csv_parser.h"
 
 #define BITS_IN_PILOT_TONE 4096
-#define BITS_IN_PADDING_TONE 48
+#define BITS_IN_SEPARATOR_TONE 48
 
 // TODO: add error handling
 void write_byte(SNDFILE* file, unsigned char byte) {
@@ -43,8 +43,8 @@ void write_pilot_tone(SNDFILE* file) {
     }
 }
 
-void write_padding(SNDFILE* file) {
-    for (int i = 0; i < BITS_IN_PADDING_TONE; i++) {
+void write_separator(SNDFILE* file) {
+    for (int i = 0; i < BITS_IN_SEPARATOR_TONE; i++) {
         audio_write_bit_one(file);
     }
 }
@@ -54,9 +54,9 @@ void write_patches(SNDFILE* file, JX3P_PATCH_COLLECTION* patches) {
         write_pilot_tone(file);
         for (int patch = 0; patch < 16; patch++) {
             write_patch(file, &patches->data[bank][patch]);
-            write_padding(file);
+            write_separator(file);
             write_patch(file, &patches->data[bank][patch]);
-            write_padding(file);
+            write_separator(file);
         }
     }
 }
