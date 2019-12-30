@@ -3,6 +3,7 @@
 #include <strings.h>
 #include "patch.h"
 
+/*
 void print_byte(unsigned char byte) {
     printf("0");
 
@@ -29,73 +30,10 @@ void print_patch(JX3P_PATCH* patch) {
 
     print_byte(checksum);
 }
-
-void populate_test_patch(JX3P_PATCH* patch, unsigned int bank_num, unsigned int patch_num) {
-    bzero(patch->raw, sizeof(patch->raw) / sizeof(unsigned char));
-    // 6 bits
-    patch->datatype = 2; // 2 bits
-
-    patch->bank_ab = bank_num; // 2 bits
-    // 6 bits
-
-    patch->bank_cd = bank_num + 2; // 2 bits
-    // 6
-
-    patch->patch_num = patch_num; // 4
-    // 4
-
-    patch->dco1_range = 0; // 2
-    patch->dco1_waveform = 0; // 2
-    patch->dco2_range = 1; // 2
-    patch->dco2_waveform = 1; // 2
-
-    patch->dco2_crossmod = 0; // 2
-    patch->vcf_env_polarity = 1; // 1
-    patch->vca_mode = 1; // 1
-    patch->dco2_fmod_env = 1; // 1
-    patch->dco2_fmod_lfo = 0; // 1
-    patch->dco1_fmod_env = 0; // 1
-    patch->dco1_fmod_lfo = 1; // 1
-
-    patch->lfo_waveform = 0; // 2
-    patch->dco_env_polarity = 1; // 1
-    patch->chorus = 1; // 1
-    // 4
-
-    patch->dco2_fine_tune = 235; // 8
-    patch->dco2_tune = 0; // 8
-    patch->dco_env_amount = 0; // 8
-    patch->dco_lfo_amount = 29; // 8
-    patch->vcf_mix = 125; // 8
-    patch->vcf_hpf = 0; // 8
-    patch->vcf_resonance = 149; // 8
-    patch->vcf_cutoff = 131; // 8
-    patch->vcf_env_mod = 254; // 8
-    patch->vcf_lfo_mod = 0; // 8
-    patch->vcf_pitch_follow = 196; // 8
-    patch->vca_level = 254; // 8
-    patch->lfo_rate = 185; // 8
-    patch->lfo_delay = 0; // 8
-    patch->env_attack = 0; // 8
-    patch->env_decay = 103; // 8
-    patch->env_sustain = 79; // 8
-    patch->env_release = 106; // 8
-
-    // This field is calculated from other content
-    patch->checksum = 0; // 8
-
-    // print_patch(patch);
-}
+*/
 
 void parse_row(char* line, JX3P_PATCH* patch, unsigned int bank_num, unsigned int patch_num) {
     bzero(&patch->raw, sizeof(patch->raw) / sizeof(unsigned char));
-    // if (bank_num == 0 && patch_num >= 7 && patch_num <= 10) {
-    //     patch->raw[6] = 0xFF;
-    // } else if (bank_num == 0 && patch_num == 14) {
-    //     patch->raw[6] = 0x10;
-    // } else if (bank_num == 1 && patch_num == 8) {
-    //     patch->raw[6] = 0xFF;
-    // }
 
     patch->datatype = 2;
     patch->bank_ab = bank_num;
@@ -265,11 +203,10 @@ void parse_row(char* line, JX3P_PATCH* patch, unsigned int bank_num, unsigned in
 
 void parse_csv(JX3P_PATCH_COLLECTION* patches, FILE* file) {
     char line[2048];
-    fgets(line, 2048, file); // header
+    fgets(line, 2048, file); // ignore header
     for (unsigned int bank = 0; bank < 2; bank++) {
         for (unsigned int patch = 0; patch < 16; patch++) {
             fgets(line, 2048, file);
-            // populate_test_patch(&patches->data[bank][patch], bank, patch);
             parse_row(line, &patches->data[bank][patch], bank, patch);
         }
     }
