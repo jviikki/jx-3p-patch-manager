@@ -62,12 +62,14 @@ void write_patches(SNDFILE* file, JX3P_PATCH_COLLECTION* patches) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        printf("USAGE: %s <audio_file>\n", argv[0]);
+    if (argc != 3) {
+        printf("USAGE: %s <input.csv> <output.wav>\n", argv[0]);
         return 1;
     }
 
-    char* path = argv[1];
+    char* input_path  = argv[1];
+    char* output_path = argv[2];
+
     SF_INFO info = {
         .samplerate = 44100,
         .channels = 1,
@@ -75,19 +77,19 @@ int main(int argc, char *argv[]) {
     };
     SNDFILE* file = NULL;
 
-    file = sf_open(path, SFM_WRITE, &info);
+    file = sf_open(output_path, SFM_WRITE, &info);
     if (!file) {
         printf("%s\n", sf_strerror(file));
         return 1;
     }
 
-    printf("frames: %lld, samplerate: %d, channels: %d, format: %d, sections: %d, seekable: %d\n",
-        info.frames, info.samplerate, info.channels, info.format, info.sections, info.seekable);
+    // printf("frames: %lld, samplerate: %d, channels: %d, format: %d, sections: %d, seekable: %d\n",
+    //     info.frames, info.samplerate, info.channels, info.format, info.sections, info.seekable);
 
     JX3P_PATCH_COLLECTION patches;
-    FILE *csv_file = fopen("patchdump.csv", "r");
+    FILE *csv_file = fopen(input_path, "r");
     if (!csv_file) {
-        printf("Unable to open CSV file\n");
+        printf("Unable to open input CSV file: %s\n", input_path);
         return 1;
     }
     parse_csv(&patches, csv_file);
