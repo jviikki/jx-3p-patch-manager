@@ -53,7 +53,11 @@ typedef union {
 		unsigned int lfo_waveform		: 2;	// [0-1] B10 LFO Waveform (saw, square, random, fast random)
 		unsigned int dco_env_polarity	: 1;	// [2] A14 DCO ENV Polarity (0=negative, 1=positive)
 		unsigned int chorus				: 1;	// [3] B09 Chorus off/on
-		unsigned int 					: 4;	// [4-7] unused
+		// The purpose of these bits is unknown to me (jviikki). When saving patches to tape memory,
+		// these bits are also transmitted. They have to remain as they were in order for
+		// verify function of JX-3P to work. I want to store these bits as well to prevent loss of
+		// information when converting from CSV file into audio.
+		unsigned int mystery			: 4;	// [4-7] Unknown
 		// 07
 		unsigned int dco2_fine_tune		: 8;	// [0-7] A09 DCO-2 Fine Tune
 		// 08

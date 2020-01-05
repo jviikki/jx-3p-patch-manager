@@ -189,7 +189,8 @@ A13 (DCO ENV Mod), A14 (DCO ENV polarity), A15 (VCF Mix), A16 (VCF High Pass), \
 B01 (VCF Cutoff Frequency), B02 (VCF LFO Mod), B03 (VCF Pitch Follow), B04 (VCF Resonance), \
 B05 (VCF ENV Mod), B06 (VCF ENV polarity), B07 (VCA Mode), B08 (VCA Level), \
 B09 (Chorus off/on), B10 (LFO Waveform), B11 (LFO Delay), B12 (LFO Rate), \
-B13 (ENV Attack), B14 (ENV Decay), B15 (ENV Sustain), B16 (ENV Release)";
+B13 (ENV Attack), B14 (ENV Decay), B15 (ENV Sustain), B16 (ENV Release), \
+mystery";
 }
 
 
@@ -201,7 +202,7 @@ char * print_csv_patch(jx3p_format * p)
 		return "x,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-";
 	}
 
-	static char pm[33 * 16];	// long enough for 33 x 15 chars
+	static char pm[34 * 16];	// long enough for 34 x 15 chars
 
 	// bank/patch location
 	sprintf(pm,				 "%s, ", patch_identifier(p->bank_cd, p->patch_num));
@@ -243,7 +244,8 @@ char * print_csv_patch(jx3p_format * p)
 	sprintf(pm + strlen(pm), "%d, ", p->env_attack);
 	sprintf(pm + strlen(pm), "%d, ", p->env_decay);
 	sprintf(pm + strlen(pm), "%d, ", p->env_sustain);
-	sprintf(pm + strlen(pm), "%d", p->env_release);
+	sprintf(pm + strlen(pm), "%d, ", p->env_release);
+	sprintf(pm + strlen(pm), "%d", p->mystery);
 
 	return pm;
 }

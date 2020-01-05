@@ -192,6 +192,8 @@ void parse_row(char* line, JX3P_PATCH* patch, unsigned int bank_num, unsigned in
             case 32:
                 patch->env_release = atoi(field);
                 break;
+            case 33:
+                patch->mystery = atoi(field);
             default:
                 break;
         }
